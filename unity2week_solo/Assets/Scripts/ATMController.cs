@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,13 +6,13 @@ using UnityEngine.UI;
 
 public class ATMController : MonoBehaviour
 {
-    public TMP_Text balanceText; // ÀÜ¾×À» Ç¥½ÃÇÒ ÅØ½ºÆ® UI
-    public TMP_Text cashText; // Çö±ÝÀ» Ç¥½ÃÇÒ ÅØ½ºÆ® UI
-    public TMP_InputField withdrawInput; // Ãâ±ÝÇÒ ±Ý¾×À» ÀÔ·ÂÇÒ InputField
+    public TMP_Text balanceText; // ìž”ì•¡ì„ í‘œì‹œí•  í…ìŠ¤íŠ¸ UI
+    public TMP_Text cashText; // í˜„ê¸ˆì„ í‘œì‹œí•  í…ìŠ¤íŠ¸ UI
+    public TMP_InputField withdrawInput; // ì¶œê¸ˆí•  ê¸ˆì•¡ì„ ìž…ë ¥í•  InputField
     public TMP_InputField depositInput; 
 
-    private int balance = 50000; // ÃÊ±â ÀÜ¾× ¼³Á¤ (50,000¿ø)
-    private int cash = 100000; // ÃÊ±â Çö±Ý ¼³Á¤ (100,000¿ø)
+    private int balance = 50000; // ì´ˆê¸° ìž”ì•¡ ì„¤ì • (50,000ì›)
+    private int cash = 100000; // ì´ˆê¸° í˜„ê¸ˆ ì„¤ì • (100,000ì›)
 
     [SerializeField] private GameObject NotEnoughMoneyPopUp;
 
@@ -23,40 +23,48 @@ public class ATMController : MonoBehaviour
 
     private void UpdateUI()
     {
-        balanceText.text = "Balance:"+ "   " + balance.ToString(); // ÀÜ¾× Ç¥½Ã
-        cashText.text = "Çö±Ý \n" + cash.ToString(); // Çö±Ý Ç¥½Ã
-        withdrawInput.text = ""; // Ãâ±Ý ÀÔ·Â ÇÊµå ÃÊ±âÈ­
+        balanceText.text = "Balance: " + " " + balance.ToString("N0"); // ìž”ì•¡ í‘œì‹œ
+        cashText.text = "í˜„ê¸ˆ \n" + cash.ToString("N0"); // í˜„ê¸ˆ í‘œì‹œ
+        withdrawInput.text = ""; // ì¶œê¸ˆ ìž…ë ¥ í•„ë“œ ì´ˆê¸°í™”
         depositInput.text = "";
     }
 
-    // ±Ý¾× ¹öÆ°À» ´­·¶À» ¶§ ÇØ´ç ±Ý¾×À» ÀÔ±ÝÇÏ´Â ÇÔ¼ö
+    // ê¸ˆì•¡ ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ í•´ë‹¹ ê¸ˆì•¡ì„ ìž…ê¸ˆí•˜ëŠ” í•¨ìˆ˜
     public void DepositAmount(int amount)
     {
-        if (cash >= amount)
+        if(amount >= 0)
         {
-            cash += amount;
-            balance -= amount;
-            UpdateUI();
+            if (cash >= amount)
+            {
+                cash -= amount;
+                balance += amount;
+                UpdateUI();
+            }
+            else
+            {
+                NotEnoughMoneyPopUp.SetActive(true);
+            }
         }
-        else
-        {
-            NotEnoughMoneyPopUp.SetActive(true);
-        }
+        
     }
 
-    // ±Ý¾× ¹öÆ°À» ´­·¶À» ¶§ ÇØ´ç ±Ý¾×À» Ãâ±ÝÇÏ´Â ÇÔ¼ö
+    // ê¸ˆì•¡ ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ í•´ë‹¹ ê¸ˆì•¡ì„ ì¶œê¸ˆí•˜ëŠ” í•¨ìˆ˜
     public void WithdrawAmount(int amount)
     {
-        if (balance >= amount)
+        if(amount >= 0)
         {
-            cash -= amount;
-            balance += amount;
-            UpdateUI();
+            if (balance >= amount)
+            {
+                cash += amount;
+                balance -= amount;
+                UpdateUI();
+            }
+            else
+            {
+                NotEnoughMoneyPopUp.SetActive(true);
+            }
         }
-        else
-        {
-            NotEnoughMoneyPopUp.SetActive(true);
-        }
+        
     }
 
     public void OnclickedSendBtn()
